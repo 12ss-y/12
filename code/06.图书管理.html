@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./lib/bootstrap.css" />
+    <script src="./lib/jquery.js"></script>
+</head>
+
+<body style="padding: 15px">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">图书表格</h3>
+        </div>
+        <div class="panel-body form-inline">
+            <div class="input-group">
+                <div class="input-group-addon">书名</div>
+                <input type="text" class="form-control" id="iptBookname" placeholder="请输入书名" />
+            </div>
+            <div class="input-group">
+                <div class="input-group-addon">作者</div>
+                <input type="text" class="form-control" id="iptAuthor" placeholder="请输入作者" />
+            </div>
+            <div class="input-group">
+                <div class="input-group-addon">出版社</div>
+                <input type="text" class="form-control" id="iptPublisher" placeholder="请输入出版社" />
+            </div>
+            <button id="btnAdd" class="btn btn-primary">添加</button>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>书名</th>
+                <th>作者</th>
+                <th>出版社</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="tb">
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>
+                    <a href="javascript:;" class="item-shanchu" data-shanchu="${item.shanchu}">删除</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // 获取根路径
+        const baseUrl = "http://ajax-base-api-t.itheima.net";
+
+        $(function () {
+            function getlis() {
+                // 获取图书数据
+                $.get(baseUrl + "/api/getbooks", (res) => {
+                    console.log(res)
+                    //判断数据是否获取成功，没有获取成功的话弹出获取数据获取失败
+                    if (res.status !== 200) return alert("数据获取失败");
+
+                    let rows = [] //设置一个空数组
+                    //遍历获取的图书数据，然后用函数设置索引index和每一列的内容item来接受
+                    $.each(res.data, function (index, item) {
+                        // 依次动态添加更新到rows空数组的类名里面
+                        rows.push(`<tr>
+                       <td>${item.id}</td>
+                       <td>${item.bookname}</td>
+                       <td>${item.author}</td>
+                       <td>${item.publisher}</td>
+                       <td>
+                         <a href="javascript:;"
+                           class="item-shanchu"
+                           data-shanchu="${item.shanchu}">删除</a>
+                       </td>
+                    </tr>`)
+                    })
+                    //清空之前的tb里的内容，然后再重新把拼接的内容渲染到页面表格上去
+                    $('#tb').empty().append(rows.join(''))
+                });
+            }
+            getlis()
+        });
+
+      // 删除事件添加
+
+      // 增加数据
+
+      // 调用渲染函数，因为要重新格式化数据
+
+      // 调用函数
+    </script>
+</body>
+
+</html>
